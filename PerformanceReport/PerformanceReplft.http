@@ -1,0 +1,6 @@
+@PerformanceReplft_HostAddress = http://localhost:5253
+
+GET {{PerformanceReplft_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

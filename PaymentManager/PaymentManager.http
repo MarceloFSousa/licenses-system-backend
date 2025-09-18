@@ -1,0 +1,6 @@
+@PaymentManager_HostAddress = http://localhost:5162
+
+GET {{PaymentManager_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
