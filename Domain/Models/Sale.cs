@@ -1,10 +1,12 @@
-﻿namespace Domain.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Domain.Models
 {
     public class Sale
     {
-        public int Id { get; set; }
-        public int ProductId { get; set; }
-        public int UserId { get; set; }
+        public Guid Id { get; set; }
+        public Guid ProductId { get; set; }
+        public Guid UserId { get; set; }
         public string Status { get; set; } = null!;
         public DateTime Expiration { get; set; }
         public DateTime CreatedAt { get; set; }

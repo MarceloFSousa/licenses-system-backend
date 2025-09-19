@@ -1,12 +1,14 @@
-﻿namespace Domain.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Domain.Models
 {
     public class Product
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = null!;
         public decimal Price { get; set; }
         public int MaxVolume { get; set; }
-        public int ExpertId { get; set; }
+        public Guid ExpertId { get; set; }
         public DateTime CreatedAt { get; set; }
 
         // Relações

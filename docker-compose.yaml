@@ -1,0 +1,84 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: S7v!q9X@pR2m#ZkL
+      POSTGRES_DB: licensesdb
+    ports:
+      - '5433:5432'
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d
+
+  init:
+    image: mcr.microsoft.com/dotnet/sdk:9.0
+    working_dir: /src
+    volumes:
+      - .:/src
+    command: sh -c "dotnet restore LicensesSystem.sln"
+    restart: 'no'
+  bff:
+    image: mcr.microsoft.com/dotnet/sdk:9.0
+    working_dir: /src/BFF
+    volumes:
+      - .:/src
+    command: dotnet watch run --urls=http://+:5001
+    ports:
+      - '5001:5001'
+    depends_on:
+      - postgres
+
+  performance:
+    image: mcr.microsoft.com/dotnet/sdk:9.0
+    working_dir: /src/PerformanceReport
+    volumes:
+      - .:/src
+    command: dotnet watch run --urls=http://+:5002
+    ports:
+      - '5002:5002'
+    depends_on:
+      - postgres
+
+  licenses:
+    image: mcr.microsoft.com/dotnet/sdk:9.0
+    working_dir: /src/LicensesManager
+    volumes:
+      - .:/src
+    command: dotnet watch run --urls=http://+:5003
+    ports:
+      - '5003:5003'
+    depends_on:
+      - postgres
+  auth:
+    image: mcr.microsoft.com/dotnet/sdk:9.0
+    working_dir: /src/Auth
+    volumes:
+      - .:/src
+    command: dotnet watch run --urls=http://+:5004
+    ports:
+      - '5004:5004'
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+  api:
+    image: mcr.microsoft.com/dotnet/sdk:9.0
+    working_dir: /src/Api
+    volumes:
+      - .:/src
+      - ./uploads:/src/Api/uploads
+    command: dotnet watch run --urls=http://+:5005
+    ports:
+      - '5005:5005'
+    depends_on:
+      - postgres
+      - auth
+    env_file:
+      - .env
+volumes:
+  pg_data:

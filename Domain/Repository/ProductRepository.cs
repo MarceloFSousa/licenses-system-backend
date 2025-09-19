@@ -1,0 +1,78 @@
+using Domain.Models;
+using Domain.Repository;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Domain.Repositories
+{
+    public interface IProductRepository
+    {
+        Task<IEnumerable<Product>> GetAllAsync();
+        Task<Product?> GetByIdAsync(Guid id);
+        Task<Product> AddAsync(Product product);
+        Task<Product?> UpdateAsync(Product product);
+        Task<bool> DeleteAsync(Guid id);
+    }
+    public class ProductRepository : IProductRepository
+    {
+        private readonly LicensesContext _context;
+
+        public ProductRepository(LicensesContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IEnumerable<Product>> GetAllAsync()
+        {
+            return await _context.Products
+                .Include(p => p.Expert)        // include Expert
+                .Include(p => p.Sales)         // include Sales
+                    .ThenInclude(s => s.User)  // include User in Sales
+                .Include(p => p.Licenses)      // include Licenses
+                    .ThenInclude(l => l.User)  // include User in Licenses
+                .ToListAsync();
+        }
+
+        public async Task<Product?> GetByIdAsync(Guid id)
+        {
+            return await _context.Products
+                .Include(p => p.Expert)
+                .Include(p => p.Sales)
+                    .ThenInclude(s => s.User)
+                .Include(p => p.Licenses)
+                    .ThenInclude(l => l.User)
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<Product> AddAsync(Product product)
+        {
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+            return product;
+        }
+
+        public async Task<Product?> UpdateAsync(Product product)
+        {
+            var existing = await _context.Products.FindAsync(product.Id);
+            if (existing == null) return null;
+
+            existing.Name = product.Name;
+            existing.Price = product.Price;
+            existing.MaxVolume = product.MaxVolume;
+            existing.ExpertId = product.ExpertId;
+            await _context.SaveChangesAsync();
+            return existing;
+        }
+
+        public async Task<bool> DeleteAsync(Guid id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null) return false;
+
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+    }
+}

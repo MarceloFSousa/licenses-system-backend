@@ -21,11 +21,11 @@ namespace Domain.Repository
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().ToTable("users");
-            modelBuilder.Entity<Sale>().ToTable("sales");
-            modelBuilder.Entity<License>().ToTable("licenses");
-            modelBuilder.Entity<Product>().ToTable("products");
-            modelBuilder.Entity<Expert>().ToTable("experts");
+            modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<Sale>().ToTable("Sales");
+            modelBuilder.Entity<License>().ToTable("Licenses");
+            modelBuilder.Entity<Product>().ToTable("Products");
+            modelBuilder.Entity<Expert>().ToTable("Experts");
         }
     }
 }

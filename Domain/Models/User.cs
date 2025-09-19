@@ -1,8 +1,10 @@
-﻿namespace Domain.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Domain.Models
 {
     public class User
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
@@ -12,3 +14,5 @@
         public ICollection<License> Licenses { get; set; } = new List<License>();
     }
 }
+public record LoginRequest(string Email, string Password);
+public record RegisterRequest(string Email, string Password,string Name,string Role);
