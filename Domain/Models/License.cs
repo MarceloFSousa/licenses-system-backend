@@ -13,3 +13,4 @@ namespace Domain.Models
         public Product Product { get; set; } = null!;
     }
 }
+public record LicensePatchRequest(string Status);

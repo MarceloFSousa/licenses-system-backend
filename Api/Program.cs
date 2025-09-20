@@ -16,7 +16,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IExpertRepository, ExpertRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ISaleRepository, SaleRepository>();
+builder.Services.AddScoped<ILicenseRepository, LicenseRepository>();
 builder.Services.AddScoped<ExpertsService>();
+builder.Services.AddScoped<LicenseService>();
+builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<SaleService>();
 builder.Services.AddScoped<ImageService>();
 
 

@@ -30,7 +30,7 @@ namespace Domain.Services
         }
 
 
-        public Task<User?> UpdateAsync(User user) => _repository.UpdateAsync(user);
+        public Task<User?> UpdateAsync(UserPutRequest user, Guid id) { return _repository.UpdateAsync(user, id); }
 
         public Task<bool> DeleteAsync(Guid id) => _repository.DeleteAsync(id);
     }

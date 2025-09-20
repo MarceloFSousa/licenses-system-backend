@@ -14,3 +14,4 @@ namespace Domain.Models
         public Product Product { get; set; } = null!;
     }
 }
+public record SalePatchRequest(string? Status,DateTime? Expiration);

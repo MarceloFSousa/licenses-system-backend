@@ -11,7 +11,7 @@ namespace Domain.Repositories
         Task<IEnumerable<User>> GetAllAsync();
         Task<User?> GetByIdAsync(Guid id);
         Task<User> AddAsync(User user);
-        Task<User?> UpdateAsync(User user);
+        Task<User?> UpdateAsync(UserPutRequest user, Guid id);
         Task<bool> DeleteAsync(Guid id);
     }
     public class UserRepository : IUserRepository
@@ -54,18 +54,24 @@ namespace Domain.Repositories
             return user;
         }
 
-        public async Task<User?> UpdateAsync(User user)
-        {
-            var existing = await _context.Users.FindAsync(user.Id);
-            if (existing == null) return null;
+        public async Task<User?> UpdateAsync(UserPutRequest user,Guid id)
+{
+    var existing = await _context.Users.FindAsync(id);
+    if (existing == null) return null;
 
-            existing.Name = user.Name;
-            existing.Email = user.Email;
-            existing.Password = user.Password;
-            existing.Role = user.Role;
-            await _context.SaveChangesAsync();
-            return existing;
-        }
+    if (!string.IsNullOrEmpty(user.Name))
+        existing.Name = user.Name;
+
+    if (!string.IsNullOrEmpty(user.Email))
+        existing.Email = user.Email;
+
+    if (user.Role != null)
+        existing.Role = user.Role;
+
+    await _context.SaveChangesAsync();
+    return existing;
+}
+
 
         public async Task<bool> DeleteAsync(Guid id)
         {

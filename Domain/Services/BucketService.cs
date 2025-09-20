@@ -11,8 +11,7 @@ public class LocalBucketService
     public string UploadFile(string fileName, byte[] fileContent, string extension)
     {
         var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        var nameWithoutExt = Path.GetFileNameWithoutExtension(fileName);
-        var finalName = $"{nameWithoutExt}_{timestamp}{extension}";
+        var finalName = $"{fileName}_{timestamp}{extension}";
 
         var filePath = Path.Combine(_basePath, finalName);
         File.WriteAllBytes(filePath, fileContent);

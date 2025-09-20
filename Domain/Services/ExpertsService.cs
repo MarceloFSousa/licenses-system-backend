@@ -9,7 +9,7 @@ namespace Domain.Services
     {
         private readonly IExpertRepository _repository;
 
-        public ExpertsService(IExpertRepository repository,LocalBucketService bucket)
+        public ExpertsService(IExpertRepository repository)
         {
             _repository = repository;
         }
@@ -18,14 +18,16 @@ namespace Domain.Services
 
         public Task<Expert?> GetByIdAsync(Guid id) => _repository.GetByIdAsync(id);
 
-        public Task<Expert> CreateAsync(string name, string description, DateTime initDate, string? imgUrl)
+        public Task<Expert> CreateAsync(string name, string description, DateTime initDate, string? imgUrl, string? fileContentUrl)
         {
-            var newExpert = new Expert{ Description = description, InitDate = initDate, Name = name, ImgUrl=imgUrl };
+            var newExpert = new Expert{ Description = description, InitDate = initDate, Name = name, ImgUrl=imgUrl,FileContentUrl=fileContentUrl };
             return _repository.AddAsync(newExpert);
         }
 
-        public Task<Expert?> UpdateAsync(Expert expert) => _repository.UpdateAsync(expert);
-
+        public Task<Expert?> UpdateAsync(ExpertPutRequest expert, Guid id)
+        {
+            return _repository.UpdateAsync(expert, id);
+        }
         public Task<bool> DeleteAsync(Guid id) => _repository.DeleteAsync(id);
     }
 }

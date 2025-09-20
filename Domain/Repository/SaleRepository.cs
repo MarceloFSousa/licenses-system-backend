@@ -11,7 +11,7 @@ namespace Domain.Repositories
         Task<IEnumerable<Sale>> GetAllAsync();
         Task<Sale?> GetByIdAsync(Guid id);
         Task<Sale> AddAsync(Sale sale);
-        Task<Sale?> UpdateAsync(Sale sale);
+        Task<Sale?> UpdateAsync(SalePatchRequest sale, Guid id);
         Task<bool> DeleteAsync(Guid id);
     }
     public class SaleRepository : ISaleRepository
@@ -48,18 +48,20 @@ namespace Domain.Repositories
             return sale;
         }
 
-        public async Task<Sale?> UpdateAsync(Sale sale)
-        {
-            var existing = await _context.Sales.FindAsync(sale.Id);
-            if (existing == null) return null;
+        public async Task<Sale?> UpdateAsync(SalePatchRequest sale, Guid id)
+{
+    var existing = await _context.Sales.FindAsync(id);
+    if (existing == null) return null;
 
-            existing.Status = sale.Status;
-            existing.ProductId = sale.ProductId;
-            existing.UserId = sale.UserId;
-            existing.Expiration = sale.Expiration;
-            await _context.SaveChangesAsync();
-            return existing;
-        }
+    if (sale.Status != null)
+        existing.Status = sale.Status;
+
+    if (sale.Expiration != default)
+        existing.Expiration = sale.Expiration;
+
+    await _context.SaveChangesAsync();
+    return existing;
+}
 
         public async Task<bool> DeleteAsync(Guid id)
         {

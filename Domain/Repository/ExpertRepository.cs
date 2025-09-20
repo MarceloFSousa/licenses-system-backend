@@ -10,7 +10,7 @@ namespace Domain.Repository
         Task<IEnumerable<Expert>> GetAllAsync();
         Task<Expert?> GetByIdAsync(Guid id);
         Task<Expert> AddAsync(Expert expert);
-        Task<Expert?> UpdateAsync(Expert expert);
+        Task<Expert?> UpdateAsync(ExpertPutRequest expert, Guid id);
         Task<bool> DeleteAsync(Guid id);
     }
 
@@ -41,14 +41,25 @@ namespace Domain.Repository
             return expert;
         }
 
-        public async Task<Expert?> UpdateAsync(Expert expert)
+        public async Task<Expert?> UpdateAsync(ExpertPutRequest expert, Guid id)
         {
-            var existing = await _context.Experts.FindAsync(expert.Id);
+            var existing = await _context.Experts.FindAsync(id);
             if (existing == null) return null;
-
-            existing.Name = expert.Name;
-            existing.Description = expert.Description;
-            existing.InitDate = expert.InitDate;
+            if (expert.Description != null)
+            {
+                
+                existing.Description = expert.Description;
+            }
+            if (expert.Name != null)
+            {
+                
+                existing.Name = expert.Name;
+            }
+            if (expert.InitDate != null)
+            {
+                
+                existing.InitDate = (DateTime)expert.InitDate;
+            }
             await _context.SaveChangesAsync();
             return existing;
         }

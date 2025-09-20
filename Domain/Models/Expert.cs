@@ -8,6 +8,7 @@ namespace Domain.Models
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
         public string ImgUrl { get; set; } = null!;
+        public string FileContentUrl { get; set; } = null!;
         public DateTime InitDate { get; set; }
         
         public DateTime CreatedAt { get; set; }
@@ -15,4 +16,4 @@ namespace Domain.Models
         //public ICollection<Negocio> Negocios { get; set; } = new List<Negocio>();
     }
 }
-public record ExpertCreateRequest(string Name, string Description,string? ImgUrl, DateTime InitDate);
+public record ExpertPutRequest(string? Name, string? Description, DateTime? InitDate);

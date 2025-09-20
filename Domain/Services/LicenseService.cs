@@ -20,7 +20,7 @@ namespace Domain.Services
 
         public Task<License> CreateAsync(License license) => _repository.AddAsync(license);
 
-        public Task<License?> UpdateAsync(License license) => _repository.UpdateAsync(license);
+        public Task<License?> UpdateAsync(LicensePatchRequest license, Guid id) => _repository.UpdateAsync(license, id);
 
         public Task<bool> DeleteAsync(Guid id) => _repository.DeleteAsync(id);
     }

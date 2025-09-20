@@ -20,7 +20,7 @@ namespace Domain.Services
 
         public Task<Sale> CreateAsync(Sale sale) => _repository.AddAsync(sale);
 
-        public Task<Sale?> UpdateAsync(Sale sale) => _repository.UpdateAsync(sale);
+        public Task<Sale?> UpdateAsync(SalePatchRequest sale, Guid id) => _repository.UpdateAsync(sale, id);
 
         public Task<bool> DeleteAsync(Guid id) => _repository.DeleteAsync(id);
     }

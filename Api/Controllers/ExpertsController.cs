@@ -43,21 +43,26 @@ namespace Api.Controllers
             [FromForm] string name,
         [FromForm] string description,
         [FromForm] DateTime initDate,
-        [FromForm] IFormFile image)
+        [FromForm] IFormFile image,
+        [FromForm] IFormFile fileContent)
         {
             var imageBytes = await _imageService.ConvertToBytesAsync(image);
             var imageExtension = await _imageService.GetExtension(image);
-            var imgUrl = _bucket.UploadFile("expert_image", imageBytes, imageExtension);
-            var created = await _expertsService.CreateAsync(name, description,initDate, imgUrl);
+            var imgUrl = _bucket.UploadFile("images/expert_image", imageBytes, imageExtension);
+
+            var fileContentBytes = await _imageService.ConvertToBytesAsync(fileContent);
+            var fileContentExtension = await _imageService.GetExtension(fileContent);
+            var fileContentUrl = _bucket.UploadFile("files/file_content", fileContentBytes, fileContentExtension);
+
+
+            var created = await _expertsService.CreateAsync(name, description,initDate, imgUrl, fileContentUrl);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
-        // PUT: api/Experts/{id}
         [HttpPut("{id:guid}")]
-        public async Task<ActionResult<Expert>> Update(Guid id, [FromBody] Expert expert)
+        public async Task<ActionResult<Expert>> Patch(Guid id, [FromBody] ExpertPutRequest expert)
         {
-            if (id != expert.Id) return BadRequest("ID mismatch");
-            var updated = await _expertsService.UpdateAsync(expert);
+            var updated = await _expertsService.UpdateAsync(expert, id);
             if (updated == null) return NotFound();
             return Ok(updated);
         }

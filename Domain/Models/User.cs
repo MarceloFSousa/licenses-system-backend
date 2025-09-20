@@ -16,3 +16,4 @@ namespace Domain.Models
 }
 public record LoginRequest(string Email, string Password);
 public record RegisterRequest(string Email, string Password,string Name,string Role);
+public record UserPutRequest(string? Email, string? Name,string? Role);

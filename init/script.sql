@@ -21,6 +21,7 @@ CREATE TABLE "Experts" (
     "Name" VARCHAR(255) NOT NULL,
     "Description" TEXT NOT NULL,
     "ImgUrl" TEXT,
+    "FileContentUrl" TEXT,
     "InitDate" TIMESTAMP WITH TIME ZONE NOT NULL,
     "CreatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now()
 );

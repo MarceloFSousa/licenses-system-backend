@@ -11,7 +11,7 @@ namespace Domain.Repositories
         Task<IEnumerable<Product>> GetAllAsync();
         Task<Product?> GetByIdAsync(Guid id);
         Task<Product> AddAsync(Product product);
-        Task<Product?> UpdateAsync(Product product);
+        Task<Product?> UpdateAsync(ProductPutRequest product, Guid id);
         Task<bool> DeleteAsync(Guid id);
     }
     public class ProductRepository : IProductRepository
@@ -52,18 +52,24 @@ namespace Domain.Repositories
             return product;
         }
 
-        public async Task<Product?> UpdateAsync(Product product)
-        {
-            var existing = await _context.Products.FindAsync(product.Id);
-            if (existing == null) return null;
+        public async Task<Product?> UpdateAsync(ProductPutRequest product, Guid id)
+{
+    var existing = await _context.Products.FindAsync(id);
+    if (existing == null) return null;
 
-            existing.Name = product.Name;
-            existing.Price = product.Price;
-            existing.MaxVolume = product.MaxVolume;
-            existing.ExpertId = product.ExpertId;
-            await _context.SaveChangesAsync();
-            return existing;
-        }
+    if (!string.IsNullOrEmpty(product.Name))
+        existing.Name = product.Name;
+
+    if (product.Price != default) // e.g., >0 check if needed
+        existing.Price = (decimal)product.Price;
+
+    if (product.MaxVolume != default)
+        existing.MaxVolume = (int)product.MaxVolume;
+
+    await _context.SaveChangesAsync();
+    return existing;
+}
+
 
         public async Task<bool> DeleteAsync(Guid id)
         {

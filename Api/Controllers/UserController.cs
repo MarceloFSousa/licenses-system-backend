@@ -37,12 +37,11 @@ namespace Api.Controllers
       
 
         // PUT: api/User/{id}
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] User user)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UserPutRequest user)
         {
-            if (id != user.Id) return BadRequest("User ID mismatch.");
 
-            await _userService.UpdateAsync(user);
+            await _userService.UpdateAsync(user,id);
             return NoContent();
         }
 

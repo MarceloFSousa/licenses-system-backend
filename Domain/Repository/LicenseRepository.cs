@@ -11,7 +11,7 @@ namespace Domain.Repositories
         Task<IEnumerable<License>> GetAllAsync();
         Task<License?> GetByIdAsync(Guid id);
         Task<License> AddAsync(License license);
-        Task<License?> UpdateAsync(License license);
+        Task<License?> UpdateAsync(LicensePatchRequest license, Guid id);
         Task<bool> DeleteAsync(Guid id);
     }
     public class LicenseRepository : ILicenseRepository
@@ -46,17 +46,18 @@ namespace Domain.Repositories
             return license;
         }
 
-        public async Task<License?> UpdateAsync(License license)
-        {
-            var existing = await _context.Licenses.FindAsync(license.Id);
-            if (existing == null) return null;
+        public async Task<License?> UpdateAsync(LicensePatchRequest license, Guid id)
+{
+    var existing = await _context.Licenses.FindAsync(id);
+    if (existing == null) return null;
 
-            existing.Status = license.Status;
-            existing.UserId = license.UserId;
-            existing.ProductId = license.ProductId;
-            await _context.SaveChangesAsync();
-            return existing;
-        }
+    if (license.Status != null)
+        existing.Status = license.Status;
+
+    await _context.SaveChangesAsync();
+    return existing;
+}
+
 
         public async Task<bool> DeleteAsync(Guid id)
         {

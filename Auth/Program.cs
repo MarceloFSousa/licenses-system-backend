@@ -32,7 +32,11 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
     };
 });
-
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddSingleton(new JwtService(builder.Configuration["Jwt:Key"] ?? "YourSuperSecretKeyHere"));
