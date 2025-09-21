@@ -12,10 +12,9 @@ namespace Domain.Models
         public DateTime? CreatedAt { get; set; }
 
         // Relações
-        public Expert? Expert { get; set; } = null!;
         public ICollection<Sale>? Sales { get; set; } = new List<Sale>();
         public ICollection<License>? Licenses { get; set; } = new List<License>();
     }
 }
 public record ProductPutRequest(decimal? Price, string? Name,int? MaxVolume);
-public record ProductRequest(decimal Price, string Name,int MaxVolume);
+public record ProductRequest(decimal Price, string Name,int MaxVolume,Guid ExpertId);

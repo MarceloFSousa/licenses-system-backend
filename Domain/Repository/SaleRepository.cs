@@ -26,18 +26,12 @@ namespace Domain.Repositories
         public async Task<IEnumerable<Sale>> GetAllAsync()
         {
             return await _context.Sales
-                .Include(s => s.User)     // include User
-                .Include(s => s.Product)  // include Product
-                    .ThenInclude(p => p.Expert) // include Expert of the Product
                 .ToListAsync();
         }
 
         public async Task<Sale?> GetByIdAsync(Guid id)
         {
             return await _context.Sales
-                .Include(s => s.User)
-                .Include(s => s.Product)
-                    .ThenInclude(p => p.Expert)
                 .FirstOrDefaultAsync(s => s.Id == id);
         }
 
@@ -56,8 +50,8 @@ namespace Domain.Repositories
     if (sale.Status != null)
         existing.Status = sale.Status;
 
-    if (sale.Expiration != default)
-        existing.Expiration = sale.Expiration;
+    if (sale.Expiration != null)
+        existing.Expiration = (DateTime)sale.Expiration;
 
     await _context.SaveChangesAsync();
     return existing;

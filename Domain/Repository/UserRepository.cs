@@ -10,6 +10,7 @@ namespace Domain.Repositories
     {
         Task<IEnumerable<User>> GetAllAsync();
         Task<User?> GetByIdAsync(Guid id);
+        Task<User?> GetByEmailAsync(string email);
         Task<User> AddAsync(User user);
         Task<User?> UpdateAsync(UserPutRequest user, Guid id);
         Task<bool> DeleteAsync(Guid id);
@@ -27,23 +28,18 @@ namespace Domain.Repositories
         {
             return await _context.Users
                 .Include(u => u.Sales)
-                    .ThenInclude(s => s.Product)   // include Product in Sales
-                        .ThenInclude(p => p.Expert) // include Expert of Product
-                .Include(u => u.Licenses)
-                    .ThenInclude(l => l.Product)   // include Product in Licenses
-                        .ThenInclude(p => p.Expert) // include Expert of Product
+                .Include(u => u.Licenses).AsSplitQuery() 
                 .ToListAsync();
         }
-
+public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
         public async Task<User?> GetByIdAsync(Guid id)
         {
             return await _context.Users
                 .Include(u => u.Sales)
-                    .ThenInclude(s => s.Product)
-                        .ThenInclude(p => p.Expert)
                 .Include(u => u.Licenses)
-                    .ThenInclude(l => l.Product)
-                        .ThenInclude(p => p.Expert)
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 

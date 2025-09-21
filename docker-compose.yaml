@@ -24,6 +24,7 @@ services:
     restart: 'no'
   bff:
     image: mcr.microsoft.com/dotnet/sdk:9.0
+    container_name: bff-1
     working_dir: /src/BFF
     volumes:
       - .:/src
@@ -32,6 +33,8 @@ services:
       - '5001:5001'
     depends_on:
       - postgres
+      - api
+      - auth
 
   performance:
     image: mcr.microsoft.com/dotnet/sdk:9.0
@@ -57,6 +60,7 @@ services:
   auth:
     image: mcr.microsoft.com/dotnet/sdk:9.0
     working_dir: /src/Auth
+    container_name: auth-1
     volumes:
       - .:/src
     command: dotnet watch run --urls=http://+:5004
@@ -69,6 +73,7 @@ services:
   api:
     image: mcr.microsoft.com/dotnet/sdk:9.0
     working_dir: /src/Api
+    container_name: api-1
     volumes:
       - .:/src
       - ./uploads:/src/Api/uploads

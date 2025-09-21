@@ -31,11 +31,17 @@ builder.Services.AddScoped<LocalBucketService>(sp =>
 {
     var config = sp.GetRequiredService<IConfiguration>();
 
-    var basePath = config["BucketSettings:BasePath"] 
+    var basePath = config["BucketSettings:BasePath"]
                    ?? Path.Combine(Directory.GetCurrentDirectory(), "uploads");
 
     return new LocalBucketService(basePath);
 });
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+    });
 builder.Services.AddDbContext<LicensesContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("LicensesDatabase")));
 // Build app

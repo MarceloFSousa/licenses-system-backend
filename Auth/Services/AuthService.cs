@@ -13,17 +13,15 @@ namespace Domain.Services
             return hashedPassword;
         }
 
-        // public async Task<User?> AuthenticateAsync(string email, string password)
-        // {
-        //     var users = await _userRepository.GetAllAsync();
-        //     var user = users.FirstOrDefault(u => u.Email == email);
+        public async Task<User?> AuthenticateAsync(User user, string password)
+        {
 
-        //     if (user == null)
-        //         return null;
+            if (user == null)
+                return null;
 
-        //     // Verify hashed password
-        //     bool isValid = BCrypt.Net.BCrypt.Verify(password, user.Password);
-        //     return isValid ? user : null;
-        // }
+            // Verify hashed password
+            bool isValid = BCrypt.Net.BCrypt.Verify(password, user.Password);
+            return isValid ? user : null;
+        }
     }
 }

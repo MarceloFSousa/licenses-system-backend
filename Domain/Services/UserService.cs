@@ -17,6 +17,7 @@ namespace Domain.Services
         public Task<IEnumerable<User>> GetAllAsync() => _repository.GetAllAsync();
 
         public Task<User?> GetByIdAsync(Guid id) => _repository.GetByIdAsync(id);
+        public Task<User?> GetByEmailAsync(string email) => _repository.GetByEmailAsync(email);
 
         public Task<User> CreateAsync(RegisterRequest req, string hashedPassword)  {
             var user = new User

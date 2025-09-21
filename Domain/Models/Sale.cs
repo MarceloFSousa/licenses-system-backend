@@ -10,8 +10,7 @@ namespace Domain.Models
         public string Status { get; set; } = null!;
         public DateTime Expiration { get; set; }
         public DateTime CreatedAt { get; set; }
-        public User User { get; set; } = null!;
-        public Product Product { get; set; } = null!;
     }
 }
 public record SalePatchRequest(string? Status,DateTime? Expiration);
+public record SaleRequest(string Status,Guid ProductId,Guid UserId,DateTime Expiration);

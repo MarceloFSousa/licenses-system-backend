@@ -26,16 +26,12 @@ namespace Domain.Repositories
         public async Task<IEnumerable<License>> GetAllAsync()
         {
             return await _context.Licenses
-                .Include(l => l.User)     
-                .Include(l => l.Product) 
                 .ToListAsync();
         }
 
         public async Task<License?> GetByIdAsync(Guid id)
         {
             return await _context.Licenses
-                .Include(l => l.User)
-                .Include(l => l.Product)
                 .FirstOrDefaultAsync(l => l.Id == id);
         }
 

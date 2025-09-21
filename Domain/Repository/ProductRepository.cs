@@ -26,22 +26,16 @@ namespace Domain.Repositories
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             return await _context.Products
-                .Include(p => p.Expert)        // include Expert
                 .Include(p => p.Sales)         // include Sales
-                    .ThenInclude(s => s.User)  // include User in Sales
                 .Include(p => p.Licenses)      // include Licenses
-                    .ThenInclude(l => l.User)  // include User in Licenses
                 .ToListAsync();
         }
 
         public async Task<Product?> GetByIdAsync(Guid id)
         {
             return await _context.Products
-                .Include(p => p.Expert)
                 .Include(p => p.Sales)
-                    .ThenInclude(s => s.User)
                 .Include(p => p.Licenses)
-                    .ThenInclude(l => l.User)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 

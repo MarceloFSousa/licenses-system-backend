@@ -20,13 +20,14 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        var user = (await _userService.GetAllAsync())
-                    .FirstOrDefault(u => u.Email == request.Email && u.Password == request.Password);
+        var user = await _userService.GetByEmailAsync(request.Email);
 
+        
         if (user == null)
             return Unauthorized();
+        var validatedUser = await _authService.AuthenticateAsync(user, request.Password);
 
-        var token = _jwtService.GenerateToken(user);
+        var token = _jwtService.GenerateToken(validatedUser);
         return Ok(new { Token = token });
     }
     [HttpPost("register")]

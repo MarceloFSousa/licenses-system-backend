@@ -32,9 +32,8 @@ public class SalesController : ControllerBase
 
     // POST: api/sales
     [HttpPost]
-    public async Task<ActionResult<Sale>> Create([FromBody] Sale sale)
+    public async Task<ActionResult<Sale>> Create([FromBody] SaleRequest sale)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
 
         var created = await _service.CreateAsync(sale);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);

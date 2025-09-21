@@ -8,10 +8,12 @@ using Domain.Services;
 public class ProductsController : ControllerBase
 {
     private readonly ProductService _service;
+    private readonly ExpertsService _expertService;
 
-    public ProductsController(ProductService service)
+    public ProductsController(ProductService service,ExpertsService expertService)
     {
         _service = service;
+        _expertService = expertService;
     }
 
     [HttpGet]
@@ -30,9 +32,9 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Product>> Create([FromBody] Product product)
+    public async Task<ActionResult<Product>> Create([FromBody] ProductRequest product)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
+        var expert = await _expertService.GetByIdAsync(product.ExpertId);
 
         var created = await _service.CreateAsync(product);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
