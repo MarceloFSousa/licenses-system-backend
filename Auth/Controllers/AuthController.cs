@@ -28,7 +28,8 @@ public class AuthController : ControllerBase
         var validatedUser = await _authService.AuthenticateAsync(user, request.Password);
 
         var token = _jwtService.GenerateToken(validatedUser);
-        return Ok(new { Token = token });
+        return Ok(new { Token = token, Role=user.Role });
+
     }
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
@@ -40,7 +41,7 @@ public class AuthController : ControllerBase
             return Unauthorized();
 
         var token = _jwtService.GenerateToken(user);
-        return Ok(new { Token = token });
+        return Ok(new { Token = token, Role=user.Role });
     }
 }
 
