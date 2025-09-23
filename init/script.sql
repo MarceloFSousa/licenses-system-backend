@@ -63,3 +63,13 @@ CREATE TABLE "Licenses" (
 );
 
 
+CREATE TABLE "Trades" (
+    "Id" SERIAL PRIMARY KEY,
+    "Symbol" VARCHAR(50) NOT NULL,
+    "Time" INTEGER NOT NULL,
+    "Volume" DECIMAL(18,8) NOT NULL,
+    "Price" DECIMAL(18,8) NOT NULL,
+    "Profit" DECIMAL(18,8) NOT NULL,
+    "Type" INTEGER NOT NULL,
+    "Magic" BIGINT NOT NULL  
+);

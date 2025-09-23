@@ -1,9 +1,21 @@
+using Domain.Repositories;
+using Domain.Repository;
+using Domain.Services;
+using Microsoft.EntityFrameworkCore;
+using PerformanceReport.Repository;
+using DotNetEnv;
+using PerformanceReport.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.WebHost.UseUrls("http://*:8080", "http://127.0.0.1:8081");
-
+Env.Load();
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<PerformanceService>();
+builder.Services.AddScoped<TradeService>();
+builder.Services.AddScoped<ITradeRepository, TradeRepository>();
+builder.Services.AddDbContext<TradeContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("LicensesDatabase")));
 
 var app = builder.Build();
 
@@ -14,15 +26,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapPost("/trades", async (HttpRequest request) =>
-{
-    using var reader = new StreamReader(request.Body);
-    var body = await reader.ReadToEndAsync();
-
-    Console.WriteLine("Received POST body:");
-    Console.WriteLine(body);
-
-    return Results.NotFound(new { message = "Received!", length = body.Length });
-});
 
 app.Run();

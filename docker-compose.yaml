@@ -46,6 +46,8 @@ services:
       - '5002:5002'
     depends_on:
       - postgres
+    env_file:
+      - .env
 
   licenses:
     image: mcr.microsoft.com/dotnet/sdk:9.0

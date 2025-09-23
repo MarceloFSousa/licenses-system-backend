@@ -1,8 +1,6 @@
 using Domain.Models;
 using Domain.Repository;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Domain.Repositories
 {
@@ -43,19 +41,19 @@ namespace Domain.Repositories
         }
 
         public async Task<Sale?> UpdateAsync(SalePatchRequest sale, Guid id)
-{
-    var existing = await _context.Sales.FindAsync(id);
-    if (existing == null) return null;
+        {
+            var existing = await _context.Sales.FindAsync(id);
+            if (existing == null) return null;
 
-    if (sale.Status != null)
-        existing.Status = sale.Status;
+            if (sale.Status != null)
+                existing.Status = sale.Status;
 
-    if (sale.Expiration != null)
-        existing.Expiration = (DateTime)sale.Expiration;
+            if (sale.Expiration != null)
+                existing.Expiration = (DateTime)sale.Expiration;
 
-    await _context.SaveChangesAsync();
-    return existing;
-}
+            await _context.SaveChangesAsync();
+            return existing;
+        }
 
         public async Task<bool> DeleteAsync(Guid id)
         {
