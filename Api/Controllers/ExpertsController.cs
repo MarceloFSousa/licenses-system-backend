@@ -43,19 +43,44 @@ namespace Api.Controllers
             [FromForm] string name,
         [FromForm] string description,
         [FromForm] DateTime initDate,
-        [FromForm] IFormFile image,
-        [FromForm] IFormFile fileContent)
+        [FromForm] IFormFile? image,
+        [FromForm] IFormFile? fileContent)
         {
-            var imageBytes = await _imageService.ConvertToBytesAsync(image);
+            string imgUrl=string.Empty;
+            string fileContentUrl=string.Empty;
+            if (image != null)
+            {
+                var imageBytes = await _imageService.ConvertToBytesAsync(image);
             var imageExtension = await _imageService.GetExtension(image);
-            var imgUrl = _bucket.UploadFile("images/expert_image", imageBytes, imageExtension);
-
-            var fileContentBytes = await _imageService.ConvertToBytesAsync(fileContent);
+             imgUrl = _bucket.UploadFile("images/expert_image", imageBytes, imageExtension);
+             
+            }
+           if (fileContent != null)
+            {
+               var fileContentBytes = await _imageService.ConvertToBytesAsync(fileContent);
             var fileContentExtension = await _imageService.GetExtension(fileContent);
-            var fileContentUrl = _bucket.UploadFile("files/file_content", fileContentBytes, fileContentExtension);
-
+             fileContentUrl = _bucket.UploadFile("files/file_content", fileContentBytes, fileContentExtension);
+ 
+            }
+            
 
             var created = await _expertsService.CreateAsync(name, description,initDate, imgUrl, fileContentUrl);
+            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        }
+        [HttpPatch("{id:guid}/fileContent")]
+        public async Task<ActionResult<Expert>> UploadFileContent(Guid id,
+        [FromForm] IFormFile fileContent)
+        {
+            string fileContentUrl=string.Empty;
+           if (fileContent != null)
+            {
+               var fileContentBytes = await _imageService.ConvertToBytesAsync(fileContent);
+            var fileContentExtension = await _imageService.GetExtension(fileContent);
+             fileContentUrl = _bucket.UploadFile("files/file_content", fileContentBytes, fileContentExtension);
+ 
+            }
+
+            var created = await _expertsService.UploadFileContent(fileContentUrl,id) ;
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 

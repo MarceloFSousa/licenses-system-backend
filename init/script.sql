@@ -9,6 +9,7 @@ CREATE TABLE "Users" (
     "Name" VARCHAR(255) NOT NULL,
     "Email" VARCHAR(255) NOT NULL UNIQUE,
     "Password" VARCHAR(255) NOT NULL,
+    "AccountNumber" INT,
     "Role" VARCHAR(50) NOT NULL,
     "CreatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now()
 );

@@ -8,6 +8,7 @@ namespace Domain.Models
         public string Name { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
+        public int AccountNumber { get; set; }
         public string Role { get; set; } = null!;
         public DateTime CreatedAt { get; set; }
         public ICollection<Sale> Sales { get; set; } = new List<Sale>();
@@ -16,4 +17,4 @@ namespace Domain.Models
 }
 public record LoginRequest(string Email, string Password);
 public record RegisterRequest(string Email, string Password,string Name,string Role);
-public record UserPutRequest(string? Email, string? Name,string? Role);
+public record UserPutRequest(string? Email, string? Name,string? Role,int? AccountNumber);

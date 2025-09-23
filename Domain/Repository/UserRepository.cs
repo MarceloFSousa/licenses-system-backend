@@ -39,7 +39,7 @@ public async Task<User?> GetByEmailAsync(string email)
         {
             return await _context.Users
                 .Include(u => u.Sales)
-                .Include(u => u.Licenses)
+                .Include(u => u.Licenses).ThenInclude(l=>l.Product)
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
@@ -63,6 +63,8 @@ public async Task<User?> GetByEmailAsync(string email)
 
     if (user.Role != null)
         existing.Role = user.Role;
+    if (user.AccountNumber != null)
+        existing.AccountNumber =(int) user.AccountNumber;
 
     await _context.SaveChangesAsync();
     return existing;

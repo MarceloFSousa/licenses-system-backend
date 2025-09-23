@@ -16,4 +16,4 @@ namespace Domain.Models
         //public ICollection<Negocio> Negocios { get; set; } = new List<Negocio>();
     }
 }
-public record ExpertPutRequest(string? Name, string? Description, DateTime? InitDate);
+public record ExpertPutRequest(string? Name, string? Description, DateTime? InitDate,string? FileContentUrl);

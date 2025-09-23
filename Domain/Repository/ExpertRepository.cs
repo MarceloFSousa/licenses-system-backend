@@ -11,6 +11,7 @@ namespace Domain.Repository
         Task<Expert?> GetByIdAsync(Guid id);
         Task<Expert> AddAsync(Expert expert);
         Task<Expert?> UpdateAsync(ExpertPutRequest expert, Guid id);
+        Task<Expert?> UploadFileContent(string url, Guid id);
         Task<bool> DeleteAsync(Guid id);
     }
 
@@ -60,6 +61,14 @@ namespace Domain.Repository
                 
                 existing.InitDate = (DateTime)expert.InitDate;
             }
+            await _context.SaveChangesAsync();
+            return existing;
+        }
+        public async Task<Expert?> UploadFileContent(string url, Guid id)
+        {
+            var existing = await _context.Experts.FindAsync(id);
+            if (existing == null) return null;
+            existing.FileContentUrl =url;
             await _context.SaveChangesAsync();
             return existing;
         }

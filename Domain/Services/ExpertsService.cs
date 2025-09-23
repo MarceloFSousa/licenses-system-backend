@@ -28,6 +28,10 @@ namespace Domain.Services
         {
             return _repository.UpdateAsync(expert, id);
         }
+        public Task<Expert?> UploadFileContent(string url, Guid id)
+        {
+            return _repository.UploadFileContent(url, id);
+        }
         public Task<bool> DeleteAsync(Guid id) => _repository.DeleteAsync(id);
     }
 }
