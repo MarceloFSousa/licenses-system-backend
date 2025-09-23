@@ -3,13 +3,12 @@ using Domain.Repository;
 using Domain.Services;
 using Microsoft.EntityFrameworkCore;
 using PerformanceReport.Repository;
+using DotNetEnv;
 using PerformanceReport.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.WebHost.UseUrls("http://*:8080", "http://127.0.0.1:8081");
-
+Env.Load();
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<PerformanceService>();
