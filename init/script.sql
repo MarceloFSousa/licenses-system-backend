@@ -64,7 +64,8 @@ CREATE TABLE "Licenses" (
 
 
 CREATE TABLE "Trades" (
-    "Id" SERIAL PRIMARY KEY,
+    "Id" UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    "Ticket" INTEGER UNIQUE,
     "Symbol" VARCHAR(50) NOT NULL,
     "Time" INTEGER NOT NULL,
     "Volume" DECIMAL(18,8) NOT NULL,

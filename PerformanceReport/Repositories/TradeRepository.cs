@@ -24,11 +24,24 @@ namespace PerformanceReport.Repository
             await _context.SaveChangesAsync();
             return trade;
         }
-        public async Task<List<Trade>> AddAsync(List<Trade> trade)
+        
+        public async Task<List<Trade>> AddAsync(List<Trade> trades)
         {
-            _context.Trades.AddRange(trade);
+            var existingTickets = await _context.Trades
+                .Select(t => t.Ticket)
+                .ToListAsync();
+
+            var newTrades = trades
+                .Where(t => !existingTickets.Contains(t.Ticket))
+                .ToList();
+
+            if (!newTrades.Any())
+                return newTrades;
+
+            await _context.Trades.AddRangeAsync(newTrades);
             await _context.SaveChangesAsync();
-            return trade;
+
+            return newTrades;
         }
 
         public async Task<IEnumerable<Trade>> GetAllAsync()

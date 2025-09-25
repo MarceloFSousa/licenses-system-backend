@@ -3,7 +3,8 @@ namespace PerformanceReport.Models
 {
     public class Trade
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
+        public int Ticket { get; set; }
         public string Symbol { get; set; }
         public int Time { get; set; }
         public decimal Volume { get; set; }
