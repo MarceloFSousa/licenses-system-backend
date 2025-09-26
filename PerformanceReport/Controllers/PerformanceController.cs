@@ -1,12 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PerformanceReport.Models;
+using PerformanceReport.Repositories;
 
 namespace PerformanceReport.Controllers
 {
     public class PerformanceController : Controller
     {
-        public IActionResult Index()
+        private readonly PerformanceService _service; 
+        public PerformanceController(PerformanceService service) { _service = service; }
+        [HttpGet("{id:int}")]
+        public ActionResult<Report> GetReportFromExpert(int id)
         {
-            return View();
+            return Ok(_service.GetPerformanceReportFromExpert(id);
         }
     }
 }
